@@ -11,7 +11,10 @@ import sys
 COLS = 120
 INDENT_W = 2
 SPACE_W = 1
-NGX_BLOCKS = [block.strip('\n') for block in open("./ngx_blocks.txt")]
+NGX_BLOCKS = ["charset_map","events","geo","http","if",
+              "limit_except","location","mail","map",
+              "match","split_clients","stream","tcp",
+              "types","upstream"]
 DUP_ITEM = ['server']
 
 
