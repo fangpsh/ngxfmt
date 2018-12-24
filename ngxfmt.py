@@ -8,17 +8,19 @@ import shutil
 import os
 import sys
 
+sys.setrecursionlimit(10000)
+
 COLS = 120
 INDENT_W = 2
 SPACE_W = 1
-NGX_BLOCKS = ["charset_map","events","geo","http","if",
-              "limit_except","location","mail","map",
-              "match","split_clients","stream","tcp",
-              "types","upstream"]
+NGX_BLOCKS = ["charset_map", "events", "geo", "http", "if",
+              "limit_except", "location", "mail", "map",
+              "match", "split_clients", "stream", "tcp",
+              "types", "upstream"]
 DUP_ITEM = ['server']
 
 
-class Conf():
+class Conf(object):
     def __init__(self, import_path, export_path):
         self.import_path = import_path
         self.export_path = export_path
@@ -45,9 +47,11 @@ class Conf():
             elif line[i] in ['\'', '\"']:
                 end = line.find(line[i], i+1)
                 if end == -1:
-                    break
-                words.append(line[i:end+1])
-                i = end + 1
+                    words.append(line[i])
+                    i += 1
+                else:
+                    words.append(line[i:end+1])
+                    i = end + 1
             elif line[i] in ['{', '}', ';']:
                 if w != "":
                     words.append(w)
@@ -160,11 +164,8 @@ class Conf():
             return
         elem = words[0]
 
-        if 'lua_block' in elem:
-            i = elem.find('lua_block')
+        if 'by_lua' in elem and 'by_lua_file' not in elem:
             print 'NOT SUPPORT LUA BLOCK!!!'
-            print self.import_path + ':'
-            print 'convert ' + elem + ' to ' + elem[0:i]+'lua_file'
             sys.exit()
         elif elem[0] == '#':
             if self.status == 'simple_end':
@@ -209,7 +210,7 @@ class Conf():
                 if not line:
                     break
                 words = self._split_line(line, words)
-        #print words
+
         self._parser(words)
         with open(self.export_path, 'w') as f:
             f.writelines(self.export_content)

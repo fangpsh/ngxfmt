@@ -2,3 +2,5 @@
 *.pyc
 venv/
 core.*
+*.fmt
+*.conf
