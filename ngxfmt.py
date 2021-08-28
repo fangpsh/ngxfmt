@@ -11,7 +11,7 @@ import sys
 sys.setrecursionlimit(10000)
 
 COLS = 120
-INDENT_W = 2
+INDENT_W = 4
 SPACE_W = 1
 NGX_BLOCKS = ["charset_map", "events", "geo", "http", "if",
               "limit_except", "location", "mail", "map",
